@@ -48,7 +48,7 @@ export class DashboardController {
     @CurrentUser('branchId') branchId: string,
     @CurrentUser('role') role: UserRole,
   ) {
-    const scoped = [UserRole.OPERATOR_ADMIN, UserRole.SUPER_ADMIN].includes(role)
+    const scoped = ([UserRole.OPERATOR_ADMIN, UserRole.SUPER_ADMIN] as string[]).includes(role)
       ? undefined
       : branchId;
     return this.service.getPendingPrizes(operatorId, scoped);

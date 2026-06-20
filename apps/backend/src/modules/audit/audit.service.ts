@@ -17,7 +17,7 @@ export class AuditService {
   constructor(private prisma: PrismaService) {}
 
   async log(params: LogParams): Promise<void> {
-    await this.prisma.auditLog.create({ data: params });
+    await this.prisma.auditLog.create({ data: params as any });
   }
 
   async findAll(operatorId: string, filters: {

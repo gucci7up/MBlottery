@@ -117,7 +117,7 @@ export class ReportsService {
   }) {
     return this.prisma.payment.findMany({
       where: {
-        operatorId,
+        operatorId: params.operatorId,
         ...(params.branchId ? { branchId: params.branchId } : {}),
         paidAt: { gte: params.from, lte: params.to },
       },

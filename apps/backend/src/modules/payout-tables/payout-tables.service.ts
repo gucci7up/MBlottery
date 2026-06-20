@@ -130,8 +130,10 @@ export class PayoutTablesService {
         operatorId: params.operatorId,
         status: PayoutTableStatus.ACTIVE,
         effectiveFrom: { lte: now },
-        OR: [{ effectiveTo: null }, { effectiveTo: { gt: now } }],
-        OR: [{ branchId: null }, { branchId: params.branchId }],
+        AND: [
+          { OR: [{ effectiveTo: null }, { effectiveTo: { gt: now } }] },
+          { OR: [{ branchId: null }, { branchId: params.branchId }] },
+        ],
       },
       include: {
         entries: {

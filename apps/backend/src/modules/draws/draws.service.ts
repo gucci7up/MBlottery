@@ -82,7 +82,7 @@ export class DrawsService {
 
   async cancel(id: string, operatorId: string) {
     const draw = await this.findOne(id, operatorId);
-    if ([DrawStatus.RESULTED, DrawStatus.CANCELLED].includes(draw.status)) {
+    if (([DrawStatus.RESULTED, DrawStatus.CANCELLED] as string[]).includes(draw.status)) {
       throw new BadRequestException('No se puede cancelar en este estado');
     }
     return this.prisma.draw.update({

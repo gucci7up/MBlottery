@@ -28,6 +28,7 @@
     "@nestjs/throttler": "^6.2.1",
     "@nestjs/bull": "^10.2.3",
     "@nestjs/schedule": "^4.1.1",
+    "@nestjs/mapped-types": "^2.0.5",
     "@nestjs/terminus": "^10.2.3",
     "@prisma/client": "^5.22.0",
     "passport": "^0.7.0",

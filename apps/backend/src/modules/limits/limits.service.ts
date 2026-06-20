@@ -39,11 +39,13 @@ export class LimitsService {
       where: {
         operatorId: params.operatorId,
         active: true,
-        OR: [{ branchId: null }, { branchId: params.branchId }],
-        OR: [{ drawId: null }, { drawId: params.drawId }],
-        OR: [{ providerId: null }, { providerId: params.providerId }],
-        OR: [{ modality: null }, { modality: params.modality }],
-        OR: [{ number: null }, { number: params.number }],
+        AND: [
+          { OR: [{ branchId: null }, { branchId: params.branchId }] },
+          { OR: [{ drawId: null }, { drawId: params.drawId }] },
+          { OR: [{ providerId: null }, { providerId: params.providerId }] },
+          { OR: [{ modality: null }, { modality: params.modality }] },
+          { OR: [{ number: null }, { number: params.number }] },
+        ],
       },
       orderBy: { priority: 'desc' },
       take: 1,
