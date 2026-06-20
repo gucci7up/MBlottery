@@ -2,7 +2,7 @@
   "$schema": "../gen/schemas/mobile-schema.json",
   "identifier": "mobile",
   "description": "Permisos para Android (Sunmi V2S)",
-  "platforms": ["android", "ios"],
+  "platforms": ["android", "iOS"],
   "windows": ["main"],
   "permissions": [
     "core:default",

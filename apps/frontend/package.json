@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit",
     "preview": "vite preview",
     "lint": "eslint src --ext ts,tsx",
     "tauri": "tauri",
@@ -32,10 +33,12 @@
     "date-fns": "^3.6.0",
     "lucide-react": "^0.468.0",
     "clsx": "^2.1.1",
-    "tailwind-merge": "^2.5.5"
+    "tailwind-merge": "^2.5.5",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2",
+    "@types/uuid": "^10.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.3.4",

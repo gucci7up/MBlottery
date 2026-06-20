@@ -20,8 +20,22 @@ async function bootstrap() {
 
   app.useGlobalFilters(new HttpExceptionFilter());
 
+  const allowedOrigins = [
+    process.env.FRONTEND_URL ?? 'http://localhost:5173',
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'tauri://localhost',
+    'https://tauri.localhost',
+    'tauri://tauri.localhost',
+  ];
+
   app.enableCors({
-    origin: process.env.FRONTEND_URL ?? 'http://localhost:5173',
+    origin: (origin, callback) => {
+      // Permitir requests sin origin (apps nativas, Postman, etc.)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      callback(null, false);
+    },
     credentials: true,
   });
 
