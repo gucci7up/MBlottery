@@ -4,8 +4,9 @@
 
 ```
 Cloudflare DNS
-  ├── api.tu-dominio.com  → App Backend  (puerto 3000)
-  └── app.tu-dominio.com  → App Frontend (puerto 80)
+  ├── api.tu-dominio.com    → App Backend  (puerto 3000)
+  ├── app.tu-dominio.com    → App Frontend / POS (puerto 80)
+  └── admin.tu-dominio.com  → App Admin Panel (puerto 80)
 ```
 
 ---
@@ -43,6 +44,41 @@ AUTO_RESULTS_ENABLED=false
 ### Dominio
 - Agregar dominio: `api.tu-dominio.com`
 - Activar SSL (Let's Encrypt) en Dokploy
+
+---
+
+## 3. App — Admin Panel (React)
+
+| Campo | Valor |
+|---|---|
+| Tipo | **Application** |
+| Proveedor | GitHub |
+| Repositorio | `gucci7up/MBlottery` |
+| Rama | `main` |
+| **Root Directory** | `apps/admin` |
+| Build Type | **Dockerfile** |
+| Dockerfile Path | `Dockerfile` |
+| Puerto | `80` |
+
+### Build Arguments del Admin
+
+```
+VITE_API_URL=https://api.tu-dominio.com
+VITE_WS_URL=wss://api.tu-dominio.com
+```
+
+### Dominio
+- Agregar dominio: `admin.tu-dominio.com`
+- Activar SSL (Let's Encrypt) en Dokploy
+
+### Roles con acceso al admin
+- `SUPER_ADMIN` — acceso total
+- `OPERATOR_ADMIN` — gestión de su operador
+- `BRANCH_OWNER` — solo lectura de sus bancas
+- `BRANCH_MANAGER` — gestión de su banca
+- `SUPERVISOR` — operaciones de caja y resultados
+
+> El rol `CASHIER` no puede acceder al panel admin.
 
 ---
 
