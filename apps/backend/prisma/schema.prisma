@@ -190,7 +190,7 @@ model Branch {
   betLimits             BetLimit[]
   settings              BranchSetting[]
   payoutTables          PayoutTable[]
-  commissionConfig      CommissionConfig?
+  commissionConfigs     CommissionConfig[]
   commissionStatements  CommissionStatement[]
 
   @@unique([operatorId, code])
