@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "strict": true,
+    "strictPropertyInitialization": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
