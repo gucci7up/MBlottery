@@ -1,10 +1,19 @@
 import axios from 'axios';
 import { useAuthStore } from '../stores/authStore';
+import { getApiBaseUrl } from './tauri';
 
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL ?? '/api',
+  baseURL: getApiBaseUrl(),
   headers: { 'Content-Type': 'application/json' },
 });
+
+/**
+ * Actualiza la baseURL en tiempo real (necesario cuando el usuario
+ * configura el servidor por primera vez en la app nativa).
+ */
+export const updateApiBaseUrl = (url: string) => {
+  api.defaults.baseURL = url;
+};
 
 api.interceptors.request.use((config) => {
   const token = useAuthStore.getState().accessToken;

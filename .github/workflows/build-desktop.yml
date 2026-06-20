@@ -1,0 +1,95 @@
+name: Build Desktop Apps
+
+on:
+  push:
+    tags:
+      - 'v*'           # Dispara en tags como v1.0.0
+  workflow_dispatch:   # O manualmente desde GitHub Actions
+    inputs:
+      api_url:
+        description: 'URL del backend (ej: https://api.tu-dominio.com)'
+        required: true
+        default: 'https://api.tu-dominio.com'
+
+permissions:
+  contents: write
+
+jobs:
+  # ─── Windows ──────────────────────────────────────────────────────────────
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: apps/frontend/package-lock.json
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+
+      - name: Install frontend deps
+        working-directory: apps/frontend
+        run: npm ci
+
+      - name: Build Tauri (Windows)
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VITE_API_URL: ${{ github.event.inputs.api_url || 'https://api.tu-dominio.com' }}
+          VITE_WS_URL: ${{ github.event.inputs.api_url && github.event.inputs.api_url || 'wss://api.tu-dominio.com' }}
+        with:
+          projectPath: apps/frontend
+          tagName: ${{ github.ref_name }}
+          releaseName: 'Sistema de Banca ${{ github.ref_name }}'
+          releaseBody: 'Instalador para Windows'
+          releaseDraft: true
+          prerelease: false
+
+  # ─── Linux ────────────────────────────────────────────────────────────────
+  build-linux:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Linux deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libwebkit2gtk-4.1-dev \
+            libappindicator3-dev \
+            librsvg2-dev \
+            patchelf \
+            libssl-dev
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: apps/frontend/package-lock.json
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install frontend deps
+        working-directory: apps/frontend
+        run: npm ci
+
+      - name: Build Tauri (Linux)
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VITE_API_URL: ${{ github.event.inputs.api_url || 'https://api.tu-dominio.com' }}
+        with:
+          projectPath: apps/frontend
+          tagName: ${{ github.ref_name }}
+          releaseName: 'Sistema de Banca ${{ github.ref_name }}'
+          releaseBody: 'Instaladores para Linux (.deb y .AppImage)'
+          releaseDraft: true
+          prerelease: false

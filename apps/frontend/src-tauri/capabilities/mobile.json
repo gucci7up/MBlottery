@@ -1,0 +1,12 @@
+{
+  "$schema": "../gen/schemas/mobile-schema.json",
+  "identifier": "mobile",
+  "description": "Permisos para Android (Sunmi V2S)",
+  "platforms": ["android", "ios"],
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "http:default",
+    "store:default"
+  ]
+}

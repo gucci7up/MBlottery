@@ -1,6 +1,9 @@
+import { useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from './stores/authStore';
 import { ThemeProvider } from './components/shared/ThemeProvider';
+import { isServerConfigured } from './lib/tauri';
+import ServerSetupPage from './pages/setup/ServerSetupPage';
 import LoginPage from './pages/auth/LoginPage';
 import POSPage from './pages/pos/POSPage';
 import DashboardPage from './pages/admin/DashboardPage';
@@ -32,6 +35,13 @@ function RootRedirect() {
 }
 
 export default function App() {
+  const [configured, setConfigured] = useState(isServerConfigured);
+
+  // En app nativa: mostrar setup si aún no se configuró el servidor
+  if (!configured) {
+    return <ServerSetupPage onConfigured={() => setConfigured(true)} />;
+  }
+
   return (
     <ThemeProvider>
     <Routes>

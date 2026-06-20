@@ -1,0 +1,82 @@
+name: Build Android APK
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      api_url:
+        description: 'URL del backend'
+        required: true
+        default: 'https://api.tu-dominio.com'
+
+permissions:
+  contents: write
+
+jobs:
+  build-android:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: apps/frontend/package-lock.json
+
+      - name: Setup Rust con target Android
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android,armv7-linux-androideabi,x86_64-linux-android,i686-linux-android
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android NDK
+        run: |
+          sdkmanager "ndk;27.0.11902837"
+          echo "NDK_HOME=$ANDROID_HOME/ndk/27.0.11902837" >> $GITHUB_ENV
+          echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/27.0.11902837" >> $GITHUB_ENV
+
+      - name: Install frontend deps
+        working-directory: apps/frontend
+        run: npm ci
+
+      - name: Init Tauri Android (si no existe gen/)
+        working-directory: apps/frontend
+        run: |
+          if [ ! -d "src-tauri/gen/android" ]; then
+            npm run tauri:android:init
+          fi
+
+      - name: Build Android APK
+        working-directory: apps/frontend
+        env:
+          VITE_API_URL: ${{ github.event.inputs.api_url || 'https://api.tu-dominio.com' }}
+          NDK_HOME: ${{ env.NDK_HOME }}
+        run: npm run tauri:android:build -- --apk
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: sistema-banca-android
+          path: apps/frontend/src-tauri/gen/android/app/build/outputs/apk/universal/release/*.apk
+
+      - name: Release APK
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: apps/frontend/src-tauri/gen/android/app/build/outputs/apk/universal/release/*.apk
+          draft: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
