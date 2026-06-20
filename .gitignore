@@ -1,0 +1,32 @@
+node_modules/
+dist/
+build/
+.env
+.env.local
+.env.*.local
+*.log
+.DS_Store
+Thumbs.db
+
+# Prisma
+apps/backend/prisma/dev.db
+apps/backend/prisma/dev.db-journal
+
+# Docker volumes (local)
+.docker/
+
+# Coverage
+coverage/
+.nyc_output/
+
+# IDE
+.idea/
+.vscode/settings.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Backups
+*.sql.gz
+*.dump

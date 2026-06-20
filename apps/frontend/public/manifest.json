@@ -1,0 +1,13 @@
+{
+  "name": "Sistema de Banca",
+  "short_name": "Banca",
+  "description": "Sistema de Lotería RD",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#1e293b",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

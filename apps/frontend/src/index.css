@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; -webkit-tap-highlight-color: transparent; }
+  body { font-family: system-ui, -apple-system, sans-serif; background: #0f172a; color: #f1f5f9; }
+  button { touch-action: manipulation; }
+}
+
+@layer utilities {
+  .touch-target { min-height: 64px; min-width: 64px; }
+  .touch-target-sm { min-height: 48px; min-width: 48px; }
+}
