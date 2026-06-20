@@ -3,7 +3,7 @@
 -- todos los bets que contienen un número específico en un sorteo.
 -- CONCURRENTLY evita bloquear la tabla durante la creación.
 
-CREATE INDEX CONCURRENTLY IF NOT EXISTS "Bet_numbers_gin_idx"
+CREATE INDEX IF NOT EXISTS "Bet_numbers_gin_idx"
 ON "Bet" USING GIN (numbers);
 
 -- Índices adicionales de rendimiento no soportados nativamente por Prisma
