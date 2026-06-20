@@ -31,9 +31,14 @@ async function bootstrap() {
 
   app.enableCors({
     origin: (origin, callback) => {
-      // Permitir requests sin origin (apps nativas, Postman, etc.)
+      // Sin origin = app nativa, Postman, curl → permitir
       if (!origin) return callback(null, true);
+      // Orígenes explícitos
       if (allowedOrigins.includes(origin)) return callback(null, true);
+      // Electron local server (cualquier puerto en localhost/127.0.0.1)
+      if (origin.startsWith('http://localhost') || origin.startsWith('http://127.0.0.1')) {
+        return callback(null, true);
+      }
       callback(null, false);
     },
     credentials: true,
